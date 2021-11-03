@@ -1,0 +1,56 @@
+﻿@page "/exibe_lista_de_pessoas"
+<h3>ListaDePessoas</h3>
+@inject HttpClient Http
+
+    <h1>Chamada de API</h1>
+
+    <br />
+
+    <button class="btn btn-dark" @onclick="GetPessoas"> Buscar Pessoas</button>
+
+
+
+@if (Pessoas == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Pessoa pes in Pessoas)
+            {
+            <tr>
+                <td>@pes.Id</td>
+                <td>@pes.Nome</td>
+                <td>@pes.CPF</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@code{
+
+    List<Pessoa> Pessoas = new List<Pessoa>();
+
+    //protected async override Task OnInitializedAsync(){
+    async Task GetPessoas() 
+    {
+        Pessoas = await Http.GetFromJsonAsync<List<Pessoa>>("api/Pesssoa/GetPessoas");
+
+
+    }
+
+
+}

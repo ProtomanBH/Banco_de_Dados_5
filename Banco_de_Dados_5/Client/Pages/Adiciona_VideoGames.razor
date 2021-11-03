@@ -1,0 +1,50 @@
+﻿@page "/adiciona_video_games"
+@inject HttpClient Http
+
+<h3>Adiciona_VideoGames</h3>
+
+<EditForm Model="videoGame1" OnInvalidSubmit="FormSubmit">
+    <p>
+        <label>Nome:</label>
+        <InputText @bind-Value="videoGame1.Nome"></InputText>
+    </p>
+    <p>
+        <label>Ano de Nascimento:</label>
+        <InputDate @bind-Value="videoGame1.AnoLancamento"></InputDate>
+    </p>
+    <p>
+        <label>Marca:</label>
+        <InputText @bind-Value="videoGame1.Marca"></InputText>
+    </p>
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <button type="submit"> Enviar </button>
+
+</EditForm>
+
+@if (sucesso == true)
+{
+    <div class"text-sucess">
+        Pessoa inserida com sucesso!
+    </div>
+}
+
+
+@code {
+
+    public VideoGames videoGame1 = new VideoGames();
+    private bool sucesso = false;
+
+
+    private async Task FormSubmit()
+    {
+        sucesso = true;
+    }
+}
+
+
+@code {
+
+}

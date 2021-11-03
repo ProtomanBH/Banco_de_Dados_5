@@ -1,0 +1,123 @@
+﻿@page "/busca_pessoas"
+@inject HttpClient Http
+
+<h3>Buscar Pessoas</h3>
+<p>
+    <label>Digite o Id da pessoa Buscada: </label>
+    <input type="number" @bind-value="_Id" @bind-value:event="oninput" />
+
+    @*<InputNumber @bind-Value="pessoa1.Id" @bind-value:event="oninput"></InputNumber>*@
+</p>
+
+@*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+<button @onclick="buscaPessoa"> Buscar </button>
+
+<div class="text-sucess">
+    <p>A Pessoa buscada é: Id: @pessoa1.Id,  Nome: @pessoa1.Nome CPF: @pessoa1.CPF</p>
+
+</div>
+
+
+<h3>Buscar Video Game</h3>
+<p>
+    <label>Digite o Id do video game a ser buscado: </label>
+    <input type="number" @bind-value="_Id" @bind-value:event="oninput" />
+
+    @*<InputNumber @bind-Value="pessoa1.Id" @bind-value:event="oninput"></InputNumber>*@
+</p>
+
+@*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+<button @onclick="buscaVideogame"> Buscar </button>
+
+<div class="text-sucess">
+    <p>A Pessoa buscada é: Id: @pessoa1.Id,  Nome: @pessoa1.Nome CPF: @pessoa1.CPF</p>
+
+</div>
+
+<div class = "text-sucess">
+    <p>A Pessoa buscada é: Id: @videogame1.Id,  Nome: @videogame1.Nome CPF: @videogame1.Marca</p>
+
+</div>
+
+
+@code {
+    private int _Id { get; set; }
+    private string _Nome { get; set; }
+    private int _CPF { get; set; }
+    private string _Marca { get; set; }
+
+    Pessoa pessoa1 = new Pessoa();
+    VideoGames videogame1 = new VideoGames();
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this._Nome = "";
+
+    }
+
+
+    private async void buscaPessoa()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        Pessoa buscada = await Http.GetFromJsonAsync<Pessoa>("api/Pessoa/GetPessoaById/" + _Id);
+
+        pessoa1.Id = buscada.Id;
+        pessoa1.Nome = buscada.Nome;
+        pessoa1.CPF = buscada.CPF;
+
+        @*
+            if (e.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Deu  super bom");
+            }
+            else
+            {
+                Console.WriteLine("Deu  super ruim");
+
+            }
+        *@
+        StateHasChanged();
+    }
+
+    private async void buscaVideogame()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        VideoGames buscado = await Http.GetFromJsonAsync<VideoGames>("api/VideoGames/GetVideoGamesById/" + _Id);
+
+        videogame1.Id = buscado.Id;
+        videogame1.Nome = buscado.Nome;
+        videogame1.Marca = buscado.Marca;
+
+        @*
+            if (e.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Deu  super bom");
+            }
+            else
+            {
+                Console.WriteLine("Deu  super ruim");
+
+            }
+        *@
+        StateHasChanged();
+    }
+
+
+    //List<Pessoa> lista_pessoa = new List<Pessoa>();
+
+    //Pessoa pessoa1 = new Pessoa { Nome = pessoa1.Nome}
+
+
+    private bool sucesso = false;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //lista_pessoa = await base.OnInitializedAsync();
+    //}
+    private async Task FormSubmit()
+    {
+        sucesso = true;
+    }
+
+
+}

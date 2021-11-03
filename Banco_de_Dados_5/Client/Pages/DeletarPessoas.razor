@@ -1,0 +1,78 @@
+﻿@page "/deleta_pessoas"
+@inject HttpClient Http
+
+<h3>Deletar Pessoas</h3>
+<EditForm Model="pessoa1" OnValidSubmit="@FormSubmit">
+    <p>
+        <label>Digite o Id da pessoa que será deletada: </label>
+        <input type="number" @bind-value="_Id" @bind-value:event="oninput" />
+
+    </p>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+
+    <button @onclick="deletaPessoa"> Deletar </button>
+</EditForm>
+
+<h3>Deletar VideoGames</h3>
+<EditForm Model="videogame1" OnValidSubmit="@FormSubmit">
+    <p>
+        <label>Digite o Id da pessoa que será deletada: </label>
+        <input type="number" @bind-value="_Id" @bind-value:event="oninput" />
+
+    </p>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+
+    <button @onclick="deletaVideogame"> Deletar </button>
+</EditForm>
+@if (sucesso == true)
+{
+    <div class="text-sucess">
+        <p>A Pessoa foi deletada com sucesso! </p>
+    </div>
+}
+
+
+@code {
+    private int _Id { get; set; }
+    private string _Nome { get; set; }
+    private int _CPF { get; set; }
+    private string _Marca { get; set; }
+    private bool sucesso = false;
+
+    Pessoa pessoa1 = new Pessoa();
+    VideoGames videogame1 = new VideoGames();
+
+    private async void deletaPessoa()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        HttpResponseMessage RespostaDaRequisicao = await Http.DeleteAsync("api/Pessoa/DelPessoa/" + _Id);
+
+        StateHasChanged();
+    }
+
+    private async void deletaVideogame()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        HttpResponseMessage RespostaDaRequisicao = await Http.DeleteAsync("api/VideoGames/DeletaVideoGame/" + _Id);
+
+        StateHasChanged();
+    }
+
+
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //lista_pessoa = await base.OnInitializedAsync();
+    //}
+    private async Task FormSubmit()
+    {
+        sucesso = true;
+    }
+}
+

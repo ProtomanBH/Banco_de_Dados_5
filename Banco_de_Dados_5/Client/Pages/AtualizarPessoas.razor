@@ -1,0 +1,122 @@
+﻿@page "/atualiza_pessoas"
+@inject HttpClient Http
+
+<h3>Adicionar Pessoas</h3>
+
+<EditForm Model="pessoa1" OnValidSubmit="@FormSubmit">
+    <p>
+        <label>Digite o Id da pessoa que será atualizada: </label>
+        <input type="number" @bind-value="pessoa1.Id" @bind-value:event="oninput" />
+    </p>
+    <p>
+        <label>Digite o novo nome da pessoa que será atualizada: </label>
+        <input type="text" @bind-value="pessoa1.Nome" @bind-value:event="oninput" />
+    </p>
+    <p>
+        <label>Digite o novo CPF da pessoa que será atualizada: </label>
+        <input type="text" @bind-value="pessoa1.CPF" @bind-value:event="oninput" />
+    </p>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+    <button @onclick="atualizaPessoa"> Atualizar </button>
+
+</EditForm>
+
+<h3>Adicionar VideoGame</h3>
+
+<EditForm Model="videogame1" OnValidSubmit="@FormSubmit">
+    <p>
+        <label>Digite o Id da pessoa que será atualizada: </label>
+        <input type="number" @bind-value="videogame1.Id" @bind-value:event="oninput" />
+    </p>
+    <p>
+        <label>Digite o novo nome da pessoa que será atualizada: </label>
+        <input type="text" @bind-value="videogame1.Nome" @bind-value:event="oninput" />
+    </p>
+    <p>
+        <label>Digite o novo CPF da pessoa que será atualizada: </label>
+        <input type="text" @bind-value="videogame1.Marca" @bind-value:event="oninput" />
+    </p>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+    <button @onclick="atualizaVideogame"> Atualizar </button>
+
+</EditForm>
+
+@if (sucesso == true)
+{
+    <div class="text-sucess">
+        @TextoRespostaRequisicao
+    </div>
+}
+
+@code {
+    private int _Id { get; set; }
+    private string _Nome { get; set; }
+    private int _CPF { get; set; }
+    private bool sucesso = false;
+    private string TextoRespostaRequisicao { get; set; } = "";
+
+    Pessoa pessoa1 = new Pessoa();
+    VideoGames videogame1 = new VideoGames();
+
+    private async void atualizaPessoa()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        HttpResponseMessage RespostaDaRequisicao = await Http.PutAsJsonAsync("api/Pessoa/UpdPessoa", pessoa1);
+
+
+        if (RespostaDaRequisicao.IsSuccessStatusCode)
+        {
+            string resposta = await RespostaDaRequisicao.Content.ReadAsStringAsync();
+            TextoRespostaRequisicao = resposta;
+        }
+        else
+        {
+            string resposta = await RespostaDaRequisicao.Content.ReadAsStringAsync();
+            TextoRespostaRequisicao = resposta;
+
+        }
+
+
+        StateHasChanged(); //atualiza o valor na tela;
+
+    }
+
+
+    private async void atualizaVideogame()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        HttpResponseMessage RespostaDaRequisicao = await Http.PutAsJsonAsync("api/VideoGames/UpdVideoGame", videogame1);
+
+
+        if (RespostaDaRequisicao.IsSuccessStatusCode)
+        {
+            string resposta = await RespostaDaRequisicao.Content.ReadAsStringAsync();
+            TextoRespostaRequisicao = resposta;
+        }
+        else
+        {
+            string resposta = await RespostaDaRequisicao.Content.ReadAsStringAsync();
+            TextoRespostaRequisicao = resposta;
+
+        }
+
+
+        StateHasChanged(); //atualiza o valor na tela;
+
+    }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //lista_pessoa = await base.OnInitializedAsync();
+    //}
+    private async Task FormSubmit()
+    {
+        sucesso = true;
+    }
+}

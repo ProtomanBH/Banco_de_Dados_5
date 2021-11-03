@@ -1,0 +1,120 @@
+﻿@page "/adiciona_pessoas"
+@inject HttpClient Http
+
+<h3>Adicionar Pessoas</h3>
+
+<EditForm Model="pessoa1" OnValidSubmit="@addPessoa"  >
+    <p>
+        <label>Nome:</label>
+        <InputText @bind-Value="pessoa1.Nome"></InputText>
+    </p>
+
+    <p>
+        <label>CPF:</label>
+        <InputText @bind-Value="pessoa1.CPF"></InputText>
+    </p>
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+    <button type="submit">Adicionar </button>
+
+</EditForm>
+
+<h3>Adicionar Video Game</h3>
+
+<EditForm Model="videogame1" OnValidSubmit="@FormSubmit2">
+    <p>
+        <label>Nome:</label>
+        <InputText @bind-Value="videogame1.Nome"></InputText>
+    </p>
+
+    <p>
+        <label>Marca:</label>
+        <InputText @bind-Value="videogame1.Marca"></InputText>
+    </p>
+
+    <p>
+        <label>Id do dono do video game:</label>
+        <InputNumber @bind-Value="videogame1.Id_Pessoa"></InputNumber>
+    </p>
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @*<button @onclick="(() => add())" type="submit"> Enviar </button>*@
+    <button @onclick="addVideogame"> Adicionar </button>
+
+</EditForm>
+
+
+
+@if (sucesso_Pessoa == true)
+{
+    <div class="text-sucess">
+        Pessoa inserida com sucesso!
+    </div>
+}
+
+@if (sucesso_VideoGame == true)
+{
+    <div class="text-sucess">
+        Video Game inserida com sucesso!
+    </div>
+}
+
+@code {
+    List<Pessoa> lista_pessoa = new List<Pessoa>();
+    Pessoa pessoa1 = new Pessoa();
+    VideoGames videogame1 = new VideoGames();
+
+    private bool sucesso_Pessoa = false;
+    private bool sucesso_VideoGame = false;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //lista_pessoa = await base.OnInitializedAsync();
+    //}
+    private async Task FormSubmit1()
+    {
+        sucesso_Pessoa = true;
+    }
+
+    private async Task FormSubmit2()
+    {
+        sucesso_VideoGame = true;
+    }
+
+    private async void addPessoa()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        HttpResponseMessage e = await Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa", pessoa1);
+        if (e.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Deu  super bom");
+        }
+        else
+        {
+            Console.WriteLine("Deu  super ruim");
+
+        }
+        StateHasChanged();
+    }
+
+    private async void addVideogame()
+    {
+        //Http.PostAsJsonAsync<Pessoa>("api/Pessoa/AddPessoa",pessoa1);
+        HttpResponseMessage e = await Http.PostAsJsonAsync<VideoGames>("api/VideoGames/AddVideoGame", videogame1);
+        if (e.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Deu  super bom");
+        }
+        else
+        {
+            Console.WriteLine("Deu  super ruim");
+
+        }
+        StateHasChanged();
+    }
+}
